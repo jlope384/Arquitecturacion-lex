@@ -1,0 +1,49 @@
+(* arnoldc.yal — YALex specification for the ArnoldC language *)
+
+{
+# Generated lexer for ArnoldC
+}
+
+let digit     = ['0'-'9']
+let lower     = ['a'-'z']
+let ident     = lower (lower | digit | '_')*
+let int_lit   = '-'? digit+
+let str_char  = [^ '"' '\n' '\\'] | '\\' _
+let str_lit   = '"' str_char* '"'
+
+rule gettoken =
+    [' ' '\t' '\n' '\r']                                 { return lexbuf }
+  | "@NO PROBLEMO"                                         { return KW_TRUE }
+  | "@I LIED"                                              { return KW_FALSE }
+  | "IT'S SHOWTIME"                                        { return KW_MAIN_START }
+  | "YOU HAVE NO RESPECT FOR LOGIC"                        { return KW_ENDIF }
+  | "YOU HAVE BEEN TERMINATED"                             { return KW_MAIN_END }
+  | "TALK TO THE HAND"                                     { return KW_PRINT }
+  | "HEY CHRISTMAS TREE"                                   { return KW_DECLARE }
+  | "YOU SET US UP"                                        { return KW_INIT }
+  | "GET TO THE CHOPPER"                                   { return KW_ASSIGN_START }
+  | "HERE IS MY INVITATION"                                { return KW_ASSIGN_INIT }
+  | "ENOUGH TALK"                                          { return KW_ASSIGN_END }
+  | "GET YOUR ASS TO MARS"                                 { return KW_CALL_ASSIGN }
+  | "GET UP"                                               { return KW_PLUS }
+  | "GET DOWN"                                             { return KW_MINUS }
+  | "YOU'RE FIRED"                                         { return KW_TIMES }
+  | "HE HAD TO SPLIT"                                      { return KW_DIV }
+  | "YOU ARE NOT YOU YOU ARE ME"                           { return KW_EQ }
+  | "LET OFF SOME STEAM BENNET"                            { return KW_GT }
+  | "CONSIDER THAT A DIVORCE"                              { return KW_OR }
+  | "KNOCK KNOCK"                                          { return KW_AND }
+  | "BECAUSE I'M GOING TO SAY PLEASE"                      { return KW_IF }
+  | "BULLSHIT"                                             { return KW_ELSE }
+  | "STICK AROUND"                                         { return KW_WHILE }
+  | "CHILL"                                                { return KW_ENDWHILE }
+  | "LISTEN TO ME VERY CAREFULLY"                          { return KW_METHOD_DEF }
+  | "I NEED YOUR CLOTHES YOUR BOOTS AND YOUR MOTORCYCLE"   { return KW_METHOD_ARG }
+  | "GIVE THESE PEOPLE AIR"                                { return KW_METHOD_NONVOID }
+  | "HASTA LA VISTA, BABY"                                 { return KW_METHOD_END }
+  | "I'LL BE BACK"                                         { return KW_RETURN }
+  | "DO IT NOW"                                            { return KW_CALL_VOID }
+  | str_lit                                                 { return STRING_LIT(lxm) }
+  | int_lit                                                 { return INT_LIT(lxm) }
+  | ident                                                   { return IDENT(lxm) }
+  | eof                                                     { raise('End of input') }
